@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Laba_5_2 {
+
+    public static void main(String[] args) {
+        try {
+            // Відкриття файлів для читання та запису
+            BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"));
+
+            String line;
+            String prevLine = null;
+            boolean wordMoved = false;
+            while ((line = reader.readLine()) != null) {
+                // Перевірка, чи рядок містить число
+                if (containsNumber(line)) {
+                    writer.write("Помилка: рядок містить число. Будь ласка, використовуйте лише текст.\n");
+                    continue;
+                }
+
+                // Розділення рядка на слова за пробілами
+                String[] words = line.split(" ");
+
+                // Перевірка кожного слова
+                for (int i = 0; i < words.length; i++) {
+                    if (!words[i].isEmpty() && words[i].charAt(0) == words[i].charAt(words[i].length() - 1)) {
+                        // Якщо слово починається та закінчується однією літерою, видаляємо його
+                        words[i] = ""; // Видаляємо слово
+                        wordMoved = false;
+                        if (i == 0 && prevLine != null) {
+                            String[] prevWords = prevLine.split(" ");
+                            for (int j = prevWords.length - 1; j >= 0; j--) {
+                                if (!prevWords[j].isEmpty()) {
+                                    prevWords[j] = "";
+                                    writer.write(prevWords[j] + " ");
+                                    wordMoved = true;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        writer.write(words[i] + " ");
+                    }
+                }
+                writer.newLine(); // Додаємо перехід на новий рядок у вихідний файл
+
+                if (!wordMoved) {
+                    prevLine = line;
+                }
+            }
+
+            // Закриття файлів
+            reader.close();
+            writer.close();
+
+            System.out.println("Результати було записано у файл output.txt");
+
+        } catch (IOException e) {
+            System.out.println("Сталася помилка: " + e.getMessage());
+        }
+    }
+
+    // Функція для перевірки, чи містить рядок число
+    private static boolean containsNumber(String line) {
+        for (char c : line.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
