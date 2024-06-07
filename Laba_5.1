@@ -1,0 +1,71 @@
+import java.util.Scanner;
+
+public class Laba_5 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean continueExecution = false;
+
+        do {
+            System.out.println("Введіть текст:");
+            String inputText = scanner.nextLine();
+
+            if (containsOnlyDigits(inputText)) {
+                System.out.println("Помилка: Ви маєте ввести слово.");
+            } else {
+                String wordWithMostVowels = findWordMostVowels(inputText);
+                if (wordWithMostVowels.isEmpty()) {
+                    System.out.println("Слово з найбільшою кількістю голосних літер: відсутнє");
+                } else {
+                    System.out.println("Слово з найбільшою кількістю голосних літер: " + wordWithMostVowels);
+                    String cleanedText = removeExtraSpace(inputText);
+                    System.out.println("Текст без непотрібних пробілів: " + cleanedText);
+                }
+            }
+
+            System.out.println("Бажаєте продовжити роботу? (1 - так, 0 - ні)");
+            int continueChoice = scanner.nextInt();
+            scanner.nextLine(); // Очистка буфера вводу
+
+            continueExecution = continueChoice == 1;
+
+        } while (continueExecution);
+
+        scanner.close();
+    }
+
+    public static String findWordMostVowels(String input) {
+        String[] words = input.split("\\s+");
+        String wordWithMostVowels = "";
+        int maxVowelsCount = 0;
+
+        for (String word : words) {
+            int vowelsCount = countVowels(word);
+            System.out.println("Слово: " + word + ", голосних літер: " + vowelsCount);
+            if (vowelsCount > maxVowelsCount) {
+                maxVowelsCount = vowelsCount;
+                wordWithMostVowels = word;
+            }
+        }
+        return wordWithMostVowels;
+    }
+
+    public static int countVowels(String word) {
+        int count = 0;
+        for (char ch : word.toLowerCase().toCharArray()) {
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'а' || ch == 'е' || ch == 'и' || ch == 'о' || ch == 'у' || ch == 'я' || ch == 'ю' || ch == 'є' || ch == 'ї') {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static String removeExtraSpace(String input) {
+        return input.trim().replaceAll("\\s+", " ");
+    }
+
+        public static boolean containsOnlyDigits(String input) {
+            return input.matches("[0-9]+");
+        }
+    }
+
+//Програмування це цікавий та корисний навик, який відкриває безмежні можливості для творчості та розвитку
