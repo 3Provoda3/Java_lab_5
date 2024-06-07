@@ -1,0 +1,53 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Laba_5_1 {
+
+    public static boolean isTriangle(int a, int b, int c) {
+        // Перевірка умови існування трикутника
+        return a + b > c && a + c > b && b + c > a;
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Записати три числа у файл
+            BufferedWriter writer = new BufferedWriter(new FileWriter("numbers.txt"));
+
+            Scanner scanner = new Scanner(System.in);
+            int[] numbers = new int[3];
+            for (int i = 0; i < 3; i++) {
+                try {
+                    System.out.print("Введіть число " + (i + 1) + ": ");
+                    numbers[i] = scanner.nextInt();
+                }catch (InputMismatchException e) {
+                    System.out.println("Помилка: Введено нечислове значення. Будь ласка, введіть число. ");
+                    scanner.next();
+                            i--;
+                            continue;
+                }
+                writer.write(String.valueOf(numbers[i]));
+                writer.newLine();
+            }
+            writer.close();
+
+            // Перевірити, чи можна побудувати трикутник
+            boolean isTriangle = isTriangle(numbers[0], numbers[1], numbers[2]);
+
+            // Дописати результат у кінець файлу
+            BufferedWriter resultWriter = new BufferedWriter(new FileWriter("numbers.txt", true));
+            resultWriter.newLine();
+            if (isTriangle) {
+                resultWriter.write("Можна побудувати трикутник.");
+            } else {
+                resultWriter.write("Не можна побудувати трикутник.");
+            }
+            resultWriter.close();
+
+        } catch (IOException e) {
+            System.out.println("Сталася помилка: " + e.getMessage());
+        }
+    }
+}
